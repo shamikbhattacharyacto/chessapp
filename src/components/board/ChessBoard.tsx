@@ -1,7 +1,6 @@
 'use client';
 import { useRef, useEffect, useState } from 'react';
 import { Chess, type Square } from 'chess.js';
-import { SYM } from '@/constants/pieces';
 import type { BoardTheme } from '@/lib/types';
 
 interface Props {
@@ -49,9 +48,15 @@ export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captu
         <div key={sq} className={cls} onClick={() => onSquareClick(sq)}
           style={{ width: sqSize, height: sqSize, background: isLight ? 'var(--sq-l)' : 'var(--sq-d)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', userSelect: 'none', position: 'relative' }}>
           {piece && (
-            <span className={piece.color === 'w' ? 'piece-w' : 'piece-b'} style={{ fontSize: sqSize * 0.72 }}>
-              {SYM[piece.color + piece.type.toUpperCase()]}
-            </span>
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={`/pieces/cburnett/${piece.color}${piece.type.toUpperCase()}.svg`}
+              alt={`${piece.color}${piece.type}`}
+              width={sqSize * 0.92}
+              height={sqSize * 0.92}
+              style={{ display: 'block', pointerEvents: 'none', userSelect: 'none' }}
+              draggable={false}
+            />
           )}
         </div>
       );

@@ -25,7 +25,8 @@ export default function OpeningClient({ opening }: { opening: Opening }) {
 
   const pct = opening.moves.length > 0 ? Math.round(game.mvIdx / opening.moves.length * 100) : 0;
 
-  // Material count
+  const modeLabel = game.freePlayMode ? 'Free Play' : game.mode === 'learn' ? 'Learn' : 'Practice';
+
   const material = (() => {
     const vals: Record<string,number> = { p:1,n:3,b:3,r:5,q:9 };
     let w = 0, b = 0;
@@ -39,21 +40,16 @@ export default function OpeningClient({ opening }: { opening: Opening }) {
 
   return (
     <div className="op-page">
-      {/* Header */}
       <header className="op-header">
         <Link href="/" className="back-btn">← Back</Link>
         <span className="op-header-title">{opening.name}</span>
-        {/* Theme toggle visible on mobile (panel hidden below) */}
-        <div style={{ display: 'none' }} id="mobile-theme-toggle">
-          <ThemeToggle />
-        </div>
-        <style>{`@media(max-width:768px){#mobile-theme-toggle{display:block}}`}</style>
+        <span className="op-mode-badge">{modeLabel}</span>
+        <ThemeToggle />
       </header>
 
       <ProgressBar pct={pct} />
 
       <div className="op-body">
-        {/* Board */}
         <section className="board-section">
           <CompletionOverlay
             show={game.showOverlay} openingName={opening.name}
@@ -81,7 +77,6 @@ export default function OpeningClient({ opening }: { opening: Opening }) {
           <div className="material-label">{material}</div>
         </section>
 
-        {/* Right panel (hidden on mobile via CSS — content shown in side-panel below) */}
         <RightPanel
           name={opening.name} mode={game.mode} freePlayMode={game.freePlayMode}
           coachMsg={game.coachMsg} moves={opening.moves} mvIdx={game.mvIdx}

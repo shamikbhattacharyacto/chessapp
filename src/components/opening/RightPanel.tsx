@@ -15,12 +15,11 @@ interface Props {
 }
 
 export default function RightPanel({ name, mode, freePlayMode, coachMsg, moves, mvIdx, doneRuns, practiceRuns, lines, theme, onThemeChange, onLearn, onPractice }: Props) {
-  const modeLabel = freePlayMode ? 'Free Play' : mode === 'learn' ? 'Learn' : 'Practice';
   return (
     <aside className="side-panel">
       {/* Title */}
       <div className="panel-section">
-        <div className="panel-label">{modeLabel}</div>
+        <div className="panel-label">{freePlayMode ? 'Free Play' : mode === 'learn' ? 'Learn Mode' : 'Practice Mode'}</div>
         <div className="panel-title">{name}</div>
       </div>
 
