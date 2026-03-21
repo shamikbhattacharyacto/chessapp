@@ -1,17 +1,24 @@
 import { OPENINGS } from '@/lib/openings';
 import OpeningsGrid from '@/components/home/OpeningsGrid';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function HomePage() {
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--bg)' }}>
-      <header style={{ padding: '18px 28px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: '1.5rem' }}>♟</span>
-        <h1 style={{ fontSize: '1.45rem', fontWeight: 700, color: 'var(--purple-light)' }}>Chess Openings</h1>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      <header className="home-header">
+        <div className="home-logo">
+          <span className="home-logo-icon">♟</span>
+          <span className="home-logo-text">Chess Openings</span>
+        </div>
+        <ThemeToggle />
       </header>
-      <p style={{ padding: '20px 28px 4px', color: 'var(--muted)', fontSize: '0.9rem' }}>
-        Master chess openings — move by move.
-      </p>
+
+      <div className="home-hero">
+        <h1>Master <span>Opening Theory</span><br />move by move.</h1>
+        <p>Pick an opening, learn every move, then drill until it&apos;s second nature.</p>
+      </div>
+
       <OpeningsGrid openings={OPENINGS} />
-    </main>
+    </div>
   );
 }

@@ -15,16 +15,14 @@ interface Props {
 }
 
 export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captureSquares, theme, onSquareClick }: Props) {
-  // Observe the OUTER wrapper so we know how much space is available before sizing squares
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [sqSize, setSqSize] = useState(50); // safe default that won't overflow on first render
+  const [sqSize, setSqSize] = useState(52);
 
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
     const obs = new ResizeObserver(entries => {
       const w = entries[0].contentRect.width;
-      // Subtract rank-labels column (20px) so board fits cleanly
       setSqSize(Math.max(36, Math.min(74, Math.floor((w - 20) / 8))));
     });
     obs.observe(el);
@@ -32,39 +30,26 @@ export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captu
   }, []);
 
   const chess = new Chess(fen);
-  const squares: JSX.Element[] = [];
+  const squares: React.JSX.Element[] = [];
 
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
-      const sq = String.fromCharCode(97 + file) + (rank + 1);
+      const sq = (String.fromCharCode(97 + file) + (rank + 1)) as Square;
       const isLight = (rank + file) % 2 === 1;
-      const piece = chess.get(sq as Square);
-      const isSelected = sq === selectedSq;
-      const isLastFrom = lastMv?.from === sq;
-      const isLastTo = lastMv?.to === sq;
-      const isHint = hintSquares.has(sq);
-      const isCapture = captureSquares.has(sq);
+      const piece = chess.get(sq);
 
       let cls = '';
-      if (isSelected) cls = 'sq-selected';
-      else if (isLastFrom) cls = 'sq-last-from';
-      else if (isLastTo) cls = 'sq-last-to';
-      if (isHint && !isCapture) cls += ' sq-hint-empty';
-      if (isCapture) cls += ' sq-hint-capture';
+      if (sq === selectedSq) cls = 'sq-selected';
+      else if (lastMv?.from === sq) cls = 'sq-last-from';
+      else if (lastMv?.to === sq) cls = 'sq-last-to';
+      if (hintSquares.has(sq) && !captureSquares.has(sq)) cls += ' sq-hint';
+      if (captureSquares.has(sq)) cls += ' sq-capture';
 
       squares.push(
-        <div key={sq} className={cls}
-          onClick={() => onSquareClick(sq)}
-          style={{
-            width: sqSize, height: sqSize,
-            background: isLight ? 'var(--sq-light)' : 'var(--sq-dark)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', userSelect: 'none', position: 'relative',
-          }}
-        >
+        <div key={sq} className={cls} onClick={() => onSquareClick(sq)}
+          style={{ width: sqSize, height: sqSize, background: isLight ? 'var(--sq-l)' : 'var(--sq-d)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', userSelect: 'none', position: 'relative' }}>
           {piece && (
-            <span className={piece.color === 'w' ? 'piece-w' : 'piece-b'}
-              style={{ fontSize: sqSize * 0.72 }}>
+            <span className={piece.color === 'w' ? 'piece-w' : 'piece-b'} style={{ fontSize: sqSize * 0.72 }}>
               {SYM[piece.color + piece.type.toUpperCase()]}
             </span>
           )}
@@ -73,23 +58,30 @@ export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captu
     }
   }
 
-  const rankLabels = ['8','7','6','5','4','3','2','1'].map(r => (
-    <div key={r} style={{ height: sqSize, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '.6rem', color: 'var(--muted)', width: 16 }}>{r}</div>
-  ));
-  const fileLabels = ['a','b','c','d','e','f','g','h'].map(f => (
-    <div key={f} style={{ width: sqSize, textAlign: 'center', fontSize: '.6rem', color: 'var(--muted)', paddingTop: 3 }}>{f}</div>
-  ));
+  const ranks = ['8','7','6','5','4','3','2','1'];
+  const files = ['a','b','c','d','e','f','g','h'];
 
   return (
-    <div ref={wrapperRef} data-theme={theme} style={{ display: 'flex', flexDirection: 'column', gap: 0, width: '100%', maxWidth: 620 }}>
+    <div ref={wrapperRef} data-board={theme} style={{ width: '100%', maxWidth: 620, display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', width: 16, flexShrink: 0 }}>{rankLabels}</div>
-        <div className="board-grid"
-          style={{ display: 'grid', gridTemplateColumns: `repeat(8, ${sqSize}px)`, gridTemplateRows: `repeat(8, ${sqSize}px)`, border: `6px solid var(--board-border)`, boxShadow: `0 6px 36px var(--board-glow, rgba(0,0,0,.5))` }}>
+        {/* Rank labels */}
+        <div style={{ display: 'flex', flexDirection: 'column', width: 16, flexShrink: 0 }}>
+          {ranks.map(r => (
+            <div key={r} style={{ height: sqSize, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.55rem', color: 'var(--text-subtle)', fontWeight: 500 }}>{r}</div>
+          ))}
+        </div>
+        {/* Board */}
+        <div className="board-inner"
+          style={{ display: 'grid', gridTemplateColumns: `repeat(8,${sqSize}px)`, gridTemplateRows: `repeat(8,${sqSize}px)`, border: `5px solid var(--bb, #7a4c20)`, borderRadius: 4, overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
           {squares}
         </div>
       </div>
-      <div style={{ display: 'flex', marginLeft: 16 }}>{fileLabels}</div>
+      {/* File labels */}
+      <div style={{ display: 'flex', marginLeft: 16 }}>
+        {files.map(f => (
+          <div key={f} style={{ width: sqSize, textAlign: 'center', fontSize: '0.55rem', color: 'var(--text-subtle)', fontWeight: 500, paddingTop: 3 }}>{f}</div>
+        ))}
+      </div>
     </div>
   );
 }
