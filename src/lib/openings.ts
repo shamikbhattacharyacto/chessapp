@@ -1,0 +1,28 @@
+import type { Opening } from './types';
+
+export const OPENINGS: Opening[] = [
+  { id:'fried-liver', name:'Fried Liver Attack', lines:15,
+    desc:'White sacrifices a knight on f7 to violently expose the Black king.',
+    moves:['e4','e5','Nf3','Nc6','Bc4','Nf6','Ng5','d5','exd5','Nxd5','Nxf7','Kxf7','Qf3+','Ke6','Nc3'] },
+  { id:'kings-gambit', name:"King's Gambit", lines:22,
+    desc:'White offers the f-pawn for rapid development and a fierce kingside attack.',
+    moves:['e4','e5','f4','exf4','Nf3','g5','h4','g4','Ne5','d6','Nxg4','Nf6','Nxf6+','Qxf6','Nc3'] },
+  { id:'danish-gambit', name:'Danish Gambit', lines:15,
+    desc:'White sacrifices two pawns for a devastating bishop battery and open files.',
+    moves:['e4','e5','d4','exd4','c3','dxc3','Bc4','cxb2','Bxb2','d5','Bxd5','Nf6','Bxf7+','Kxf7','Qb3+'] },
+  { id:'caro-kann', name:'Caro-Kann Defense', lines:28,
+    desc:'A solid defense fighting for central space with a sound pawn structure.',
+    moves:['e4','c6','d4','d5','Nc3','dxe4','Nxe4','Bf5','Ng3','Bg6','h4','h6','Nf3','Nd7','h5'] },
+  { id:'queens-gambit', name:"Queen's Gambit Declined", lines:20,
+    desc:"Black builds a classical central fortress and declines the gambit pawn.",
+    moves:['d4','d5','c4','e6','Nc3','Nf6','Bg5','Be7','e3','O-O','Nf3','Nbd7','Rc1','c6','Bd3'] },
+  { id:'sicilian', name:'Sicilian Defense', lines:38,
+    desc:'The most popular reply to 1.e4, creating rich asymmetric counterplay.',
+    moves:['e4','c5','Nf3','d6','d4','cxd4','Nxd4','Nf6','Nc3','a6','Be3','e5','Nb3','Be6','f3'] },
+  { id:'italian', name:'Italian Game', lines:22,
+    desc:'Classical development aiming for rapid piece activity and center control.',
+    moves:['e4','e5','Nf3','Nc6','Bc4','Bc5','c3','Nf6','d4','exd4','cxd4','Bb4+','Nc3','Nxe4','O-O'] },
+  { id:'ruy-lopez', name:'Ruy Lopez', lines:55,
+    desc:"One of the oldest openings, immediately pressuring Black's e5 pawn.",
+    moves:['e4','e5','Nf3','Nc6','Bb5','a6','Ba4','Nf6','O-O','Be7','Re1','b5','Bb3','d6','c3'] },
+];

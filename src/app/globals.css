@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0d0d0d;
+  --card-bg: #1a1a1a;
+  --border: #2a2a2a;
+  --purple: #7c3aed;
+  --purple-light: #9f67ff;
+  --purple-dim: #3b1d8a;
+  --text: #e5e5e5;
+  --muted: #777;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; min-height: 100vh; }
+
+/* Board themes */
+[data-theme="wood"]    { --sq-light: #f0d9b5; --sq-dark: #b58863; --board-border: #7a4c20; }
+[data-theme="classic"] { --sq-light: #f5f5f5; --sq-dark: #4a4a4a; --board-border: #222222; }
+[data-theme="glass"]   { --sq-light: rgba(190,220,245,0.45); --sq-dark: rgba(55,115,185,0.65); --board-border: rgba(120,200,255,0.5); }
+[data-theme="marble"]  { --sq-light: #ede5d5; --sq-dark: #7a9e7a; --board-border: #5a7a5a; }
+
+[data-theme="glass"] .board-grid { background: linear-gradient(135deg, #0d2040, #07152a); }
+[data-theme="wood"] .board-grid { box-shadow: 0 6px 36px rgba(0,0,0,.65), inset 0 0 12px rgba(0,0,0,.25); }
+
+/* Piece styles */
+.piece-w {
+  color: #ffffff;
+  text-shadow: 0 0 2px #000, 0 0 4px rgba(0,0,0,.9), 1px 0 1px rgba(0,0,0,.7), -1px 0 1px rgba(0,0,0,.7), 0 1px 1px rgba(0,0,0,.7), 0 -1px 1px rgba(0,0,0,.7);
+  line-height: 1; display: block; pointer-events: none;
+}
+.piece-b {
+  color: #1a1108;
+  text-shadow: 0 0 1px rgba(255,255,255,.15), 0 1px 3px rgba(0,0,0,.5);
+  line-height: 1; display: block; pointer-events: none;
+}
+[data-theme="glass"] .piece-w { color: rgba(225,245,255,.96); text-shadow: none; filter: drop-shadow(0 0 5px rgba(100,200,255,.85)) drop-shadow(0 0 2px rgba(255,255,255,.6)); }
+[data-theme="glass"] .piece-b { color: rgba(8,35,80,1); text-shadow: none; filter: drop-shadow(0 0 4px rgba(0,120,255,.5)); }
+
+/* Square highlights */
+.sq-selected  { background: #f6f66a !important; }
+.sq-last-from { background: rgba(246,246,105,.45) !important; }
+.sq-last-to   { background: rgba(246,246,105,.65) !important; }
+
+/* Move hints */
+.sq-hint-empty::after {
+  content: ''; position: absolute; width: 33%; height: 33%;
+  border-radius: 50%; background: rgba(0,0,0,.22); pointer-events: none;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.sq-hint-capture::after {
+  content: ''; position: absolute; inset: 4px; border-radius: 50%;
+  border: 5px solid rgba(0,0,0,.22); pointer-events: none;
+}
