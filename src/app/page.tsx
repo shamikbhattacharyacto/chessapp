@@ -2,9 +2,11 @@ import { OPENINGS } from '@/lib/openings';
 import OpeningsGrid from '@/components/home/OpeningsGrid';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
-const totalMoves = 168; // 8 openings × ~21 avg moves
-
 export default function HomePage() {
+  const totalMoves = OPENINGS.reduce((sum, o) => sum + o.moves.length, 0);
+  const whiteCount = OPENINGS.filter(o => o.color === 'white').length;
+  const blackCount = OPENINGS.filter(o => o.color === 'black').length;
+
   return (
     <div className="home-wrap">
       <header className="home-header">
@@ -27,13 +29,18 @@ export default function HomePage() {
         </div>
         <span className="stat-dot" />
         <div className="stat-item">
-          <span className="stat-num">{totalMoves}</span>
-          <span className="stat-lbl">total moves</span>
+          <span className="stat-num">{whiteCount}</span>
+          <span className="stat-lbl">white</span>
         </div>
         <span className="stat-dot" />
         <div className="stat-item">
-          <span className="stat-num">Free</span>
-          <span className="stat-lbl">forever</span>
+          <span className="stat-num">{blackCount}</span>
+          <span className="stat-lbl">black</span>
+        </div>
+        <span className="stat-dot" />
+        <div className="stat-item">
+          <span className="stat-num">{totalMoves}</span>
+          <span className="stat-lbl">total moves</span>
         </div>
       </div>
 
