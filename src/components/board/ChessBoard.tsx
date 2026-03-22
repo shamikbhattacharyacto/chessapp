@@ -10,10 +10,11 @@ interface Props {
   hintSquares: Set<string>;
   captureSquares: Set<string>;
   theme: BoardTheme;
+  flipped?: boolean;
   onSquareClick: (sq: string) => void;
 }
 
-export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captureSquares, theme, onSquareClick }: Props) {
+export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captureSquares, theme, flipped = false, onSquareClick }: Props) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [sqSize, setSqSize] = useState(52);
 
@@ -31,8 +32,12 @@ export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captu
   const chess = new Chess(fen);
   const squares: React.JSX.Element[] = [];
 
-  for (let rank = 7; rank >= 0; rank--) {
-    for (let file = 0; file < 8; file++) {
+  // flipped=true → Black at bottom (Black openings): rank 1..8 top-to-bottom, file h..a left-to-right
+  const rankOrder = flipped ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
+  const fileOrder = flipped ? [7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7];
+
+  for (const rank of rankOrder) {
+    for (const file of fileOrder) {
       const sq = (String.fromCharCode(97 + file) + (rank + 1)) as Square;
       const isLight = (rank + file) % 2 === 1;
       const piece = chess.get(sq);
@@ -63,8 +68,8 @@ export default function ChessBoard({ fen, selectedSq, lastMv, hintSquares, captu
     }
   }
 
-  const ranks = ['8','7','6','5','4','3','2','1'];
-  const files = ['a','b','c','d','e','f','g','h'];
+  const ranks = flipped ? ['1','2','3','4','5','6','7','8'] : ['8','7','6','5','4','3','2','1'];
+  const files = flipped ? ['h','g','f','e','d','c','b','a'] : ['a','b','c','d','e','f','g','h'];
 
   return (
     <div ref={wrapperRef} data-board={theme} style={{ width: '100%', maxWidth: 620, display: 'flex', flexDirection: 'column' }}>

@@ -18,7 +18,7 @@ export default function OpeningClient({ opening }: { opening: Opening }) {
   const handleClick = useCallback((sq: string) => {
     game.clickSquare(sq, {
       mvIdx: game.mvIdx, lineOver: game.lineOver,
-      freePlayMode: game.freePlayMode, blackWaiting: game.blackWaiting,
+      freePlayMode: game.freePlayMode, opponentWaiting: game.opponentWaiting,
       selectedSq: game.selectedSq, lastMv: game.lastMv, mode: game.mode,
     });
   }, [game]);
@@ -69,7 +69,8 @@ export default function OpeningClient({ opening }: { opening: Opening }) {
             fen={game.fen} selectedSq={game.selectedSq}
             lastMv={game.lastMv} hintSquares={game.hintSquares}
             captureSquares={game.captureSquares}
-            theme={boardTheme} onSquareClick={handleClick}
+            theme={boardTheme} flipped={opening.color === 'black'}
+            onSquareClick={handleClick}
           />
 
           <FeedbackBar type={game.feedback.type} msg={game.feedback.msg} />
